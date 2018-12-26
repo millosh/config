@@ -1,0 +1,20 @@
+A short note here about extending LVM2 partitions, as I haven't found it
+anywhere else (though I haven't searched too much, I admit):
+
+# fdisk /dev/sda
+# # Add partition, type 8e, save, quite and likely restart the machine.
+# # If it's a virtual machine (as it's very likely), you don't need to care
+# # about the number of primary partitions, actually. If your brain bugs,
+# # keep in mind that you can create /dev/sdb afterwards and add it into
+# # your volume gorup.
+# vgextend VolumeName /dev/sdaX
+# vgdisplay
+# # The first number from line which begins "Free  PE / Size" is all you
+# # need if you want to just add some space to your server. Documentation
+# # usually insists that you should give the absolute number, instead of
+# # relatively increasing the partition.
+# lvextend -l +<that_number> /dev/VolumeName/Partition
+# # No need for reboot after this. (No need neither for 2.6.32 kernels nor
+# # for 4.x kernels.)
+# resize2fs /dev/VlumeName/Partition
+# # No need for reboot after this, as well.
