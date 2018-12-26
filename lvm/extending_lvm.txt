@@ -1,3 +1,5 @@
+== 2018-12-26 ==
+
 A short note here about extending LVM2 partitions, as I haven't found it
 anywhere else (though I haven't searched too much, I admit):
 
