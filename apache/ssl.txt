@@ -1,0 +1,62 @@
+== 2018-12-26 ==
+
+How to get A+ on ssllabs.com and have a decent security. Apache 2.4 on
+Debian.
+
+# # You will need mod_headers
+# cd /etc/apache2/mods-enabled; ln -s ../mods-available/headers.load .
+# cd <wherever you keep your certificates>
+# openssl dhparam -out dhparams.pem 4096
+# <editor> /etc/apache2/mods-enabled/ssl.conf
+# # Remove everything from the generic file and add the following:
+
+<IfModule mod_ssl.c>
+
+# Works with Apache 2.2 and Apache 2.4
+SSLRandomSeed		startup		builtin
+SSLRandomSeed		startup		file:/dev/urandom 512
+SSLRandomSeed		connect		builtin
+SSLRandomSeed		connect		file:/dev/urandom 512
+SSLCryptoDevice         builtin
+SSLOpenSSLConfCmd	DHParameters	"<wherever you keep your certificates>/dhparams.pem"
+SSLOpenSSLConfCmd	ECDHParameters	brainpoolP256r1
+SSLOpenSSLConfCmd	Curves		secp521r1:secp384r1:prime256v1
+Header			always set	Strict-Transport-Security "max-age=63072000; includeSubDomains; preload
+Header			always set	X-Frame-Options sameorigin
+Header                  always set	X-Content-Type-Options nosniff
+Header			always set	X-XSS-Protection "1; mode=block"
+SSLStaplingCache	"shmcb:logs/stapling-cache(150000)"
+SSLSessionCache		shmcb:/var/cache/mod_ssl/scache(512000)
+SSLSessionCacheTimeout	300
+SSLCipherSuite		!AES128:!aNULL:EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
+SSLProtocol		All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+SSLHonorCipherOrder	on
+SSLPassPhraseDialog	exec:/usr/share/apache2/ask-for-passphrase
+
+# Requires Apache >= 2.4
+SSLCompression		off
+SSLUseStapling		on
+
+# Requires Apache >= 2.4.11
+SSLSessionTickets	off
+
+# Rest
+AddType application/x-x509-ca-cert	.crt
+AddType application/x-pkcs7-crl		.crl
+
+</IfModule>
+
+Your SSL virtual host file should have just turning on SSL and the keys
+(including the whole chain).
+
+Note that some web systems are setting their own headers. That's not a
+problem usually, however you shouldn't have HSTS defined two times. If
+ssllabs.com says that you have it defined in two places, check .htaccess
+file from the document root or the relevant place of software you are using
+(Scurity Kit in Drupal, for example).
+
+The documentation is not finished, but if you install fresh Debian 9, update
+it and install Apache there, you will get A+ and everything 100% covered on
+ssllabs.com except the key exchange.
+
+I will update this documentation in the future.
