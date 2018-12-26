@@ -1,0 +1,20 @@
+== 2018-12-26 ==
+
+=== SMTP ===
+
+* https://www.skelleton.net/2015/03/21/how-to-eliminate-spam-and-protect-your-name-with-dmarc/
+** https://www.kitterman.com/dmarc_asst.py
+* https://support.google.com/mail/answer/81126?p=IPv6AuthError&visit_id=636811892960282674-2431085664&rd=1#authentication
+* https://support.google.com/mail/answer/6227174
+* https://toolbox.googleapps.com/apps/checkmx/check?domain=pozorista.club&dkim_selector=
+* https://support.google.com/a/answer/2466563?hl=en&ref_topic=2759254
+* https://support.google.com/a/answer/174124
+* Analyze DMARC reports
+* Write the documentation
+* SPF
+* DKIM
+* DMARC
+* Amavis
+* ClamAV
+* Spamassassin
+
